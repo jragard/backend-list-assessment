@@ -15,20 +15,41 @@
 # so [1, 2, 2, 3] returns [1, 2, 3]. You may create a new list or
 # modify the passed in list.
 # Hint: Don't use `set()`
-
-
 def remove_adjacent(nums):
-    """Your code goes here.  Edit this docstring."""
-    return
+    result = []
+    for num in nums:
+        if len(result) == 0 or num != result[-1]:
+            result.append(num)
+    return result
 
 
 # E. Given two lists sorted in increasing order, create and return a merged
 # list of all the elements in sorted order. You may modify the passed in lists.
 # The solution should work in "linear" time, making a single pass of both lists.
 # Hint: Don't use `sort` or `sorted` -- they are not linear time.
+
 def linear_merge(list1, list2):
-    """Your code goes here.  Edit this docstring."""
-    return
+    result = []
+    # Look at the two lists so long as both are non-empty.
+    # Take whichever element [0] is smaller.
+    while len(list1) and len(list2):
+        if list1[0] < list2[0]:
+            result.append(list1.pop(0))
+        else:
+            result.append(list2.pop(0))
+
+    # Now tack on what's left
+    result.extend(list1)
+    result.extend(list2)
+    return result
+
+# Note: the solution above is kind of cute, but unforunately list.pop(0)
+# is not constant time with the standard python list implementation, so
+# the above is not strictly linear time.
+# An alternate approach uses pop(-1) to remove the endmost elements
+# from each list, building a solution list which is backwards.
+# Then use reversed() to put the result back in the correct order. That
+# solution works in linear time, but is more ugly.
 
 
 # Simple provided test() function used in main() to print
@@ -49,6 +70,7 @@ def main():
     test(remove_adjacent([]), [])
     test(remove_adjacent([2, 2, 3, 3, 3, 4, 5, 2, 3]), [2, 3, 4, 5, 2, 3])
 
+
     print('linear_merge')
     test(linear_merge(['aa', 'xx', 'zz'], ['bb', 'cc']),
          ['aa', 'bb', 'cc', 'xx', 'zz'])
@@ -56,7 +78,6 @@ def main():
          ['aa', 'bb', 'cc', 'xx', 'zz'])
     test(linear_merge(['aa', 'aa'], ['aa', 'bb', 'bb']),
          ['aa', 'aa', 'aa', 'bb', 'bb'])
-
 
 # Standard boilerplate (python idiom) to call the main() function.
 if __name__ == '__main__':
